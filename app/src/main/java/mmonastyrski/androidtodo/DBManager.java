@@ -5,13 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by mateusz on 2/18/17.
- */
 public class DBManager extends SQLiteOpenHelper {
     
     private static final int DATABASE_VERSION=1;

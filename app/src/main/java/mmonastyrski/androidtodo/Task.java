@@ -1,8 +1,5 @@
 package mmonastyrski.androidtodo;
 
-/**
- * Created by mateusz on 2/18/17.
- */
 public class Task {
     private int _id;
     private String _description;

@@ -10,10 +10,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-/**
- * Created by mateusz on 2/18/17.
- */
+
 public class TaskAdapter extends ArrayAdapter<Task> {
     
     public TaskAdapter(Context context, ArrayList<Task> tasks) {
@@ -47,7 +46,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         else {
             holder=(ViewHolder) view.getTag();
         }
-        holder.taskId.setText(Integer.toString(task.get_id()));
+        holder.taskId.setText(String.format(Locale.getDefault(), "%d", task.get_id()));
         holder.taskDescription.setText(task.get_description());
         holder.isDone.setChecked(task.is_done());
         if(holder.isDone.isChecked()){
