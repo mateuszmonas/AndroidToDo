@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import java.util.ArrayList;
+
 
 public class FragmentList extends Fragment {
     
@@ -16,13 +18,9 @@ public class FragmentList extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         
+        final DBManager dbManager = new DBManager(getActivity(), null, null, 1);
         
-        Task[] tasks = new Task[5];
-        tasks[0] = new Task("aaa");
-        tasks[1] = new Task("bbb");
-        tasks[2] = new Task("ccc");
-        tasks[3] = new Task("ddd");
-        tasks[4] = new Task("eee");
+        ArrayList<Task> tasks = dbManager.getDB();
         
         final ListAdapter tasksAdapter = new TaskAdapter(getActivity(), tasks);
         final ListView tasksListView = (ListView) view.findViewById(R.id.tasksListView);
@@ -34,16 +32,19 @@ public class FragmentList extends Fragment {
                 Task task = (Task) adapterView.getItemAtPosition(i);
                 task.set_done(!task.is_done());
                 
-                CheckBox checkBox = (CheckBox)view.findViewById(R.id.isDone);
-                TextView textView = ((TextView)view.findViewById(R.id.taskDescription));
+                CheckBox isDone = (CheckBox)view.findViewById(R.id.isDone);
+                TextView taskDescription = ((TextView)view.findViewById(R.id.taskDescription));
+                TextView taskId = ((TextView)view.findViewById(R.id.taskId));
                 
-                checkBox.setChecked(task.is_done());
-                if(checkBox.isChecked()) {
-                    textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                
+                isDone.setChecked(task.is_done());
+                if(isDone.isChecked()) {
+                    taskDescription.setPaintFlags(taskDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
                 else {
-                    textView.setPaintFlags(textView.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskDescription.setPaintFlags(taskDescription.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
                 }
+                dbManager.updateTask(taskId.getText().toString(), taskDescription.getText().toString(), isDone.isChecked());
             }
         });
         return view;

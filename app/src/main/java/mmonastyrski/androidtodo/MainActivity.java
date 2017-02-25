@@ -1,17 +1,18 @@
 package mmonastyrski.androidtodo;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity {
     
+    private DBManager dbManager;
     private Button rightButton;
     private Button leftButton;
     
@@ -19,7 +20,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    
+        
+        
+        dbManager = new DBManager(this, null, null, 1);
+        
         createButtons();
         
         if(savedInstanceState!=null){
@@ -32,10 +36,12 @@ public class MainActivity extends AppCompatActivity {
                 case "FragmentList":{
                     addFragmentListButtons();
                     changeFragment(new FragmentList());
+                    break;
                 }
                 default:{
                     addFragmentListButtons();
                     changeFragment(new FragmentList());
+                    break;
                 }
             }
         }
@@ -82,16 +88,33 @@ public class MainActivity extends AppCompatActivity {
         leftButton.setText("R");
         leftButton.setOnClickListener(onRemoveListener);
         rightButton.setText("A");
-        rightButton.setOnClickListener(onAddListener);
+        rightButton.setOnClickListener(onGoToAddTaskListener);
     }
     
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
         Fragment fragment = getFragmentManager().findFragmentById(R.id.fragment);
-        if(fragment instanceof FragmentList) savedInstanceState.putString("fragment", "FragmentList");
-        else savedInstanceState.putString("fragment", "FragmentAddTask");
+        if(fragment instanceof FragmentList){
+            savedInstanceState.putString("fragment", "FragmentList");
+        }
+        else{
+            EditText newTask = (EditText) findViewById(R.id.newTask);
+            String description = newTask.getText().toString();
+            savedInstanceState.putString("description", description);
+            savedInstanceState.putString("fragment", "FragmentAddTask");
+        }
     }
     
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState!=null && savedInstanceState.getString("fragment").equals("FragmentAddTask")) {
+            EditText newTask = (EditText) findViewById(R.id.newTask);
+            String description = savedInstanceState.getString("description");
+            newTask.setText(description);
+        }
+    }
     
     private void changeFragment(Fragment f){
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -99,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
     
-    private OnClickListener onAddListener = new OnClickListener() {
+    private OnClickListener onGoToAddTaskListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             addFragmentAddTaskButtons();
@@ -110,8 +133,14 @@ public class MainActivity extends AppCompatActivity {
     private OnClickListener onCreateTaskListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            addFragmentListButtons();
+            EditText newTask = (EditText)findViewById(R.id.newTask);
+            String description = newTask.getText().toString().trim();
+            //only adds task if description was added
+            if(!description.equals("")) {
+                dbManager.addTask(new Task(description));
+                addFragmentListButtons();
             changeFragment(new FragmentList());
+        }
         }
     };
     
@@ -126,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
     private OnClickListener onRemoveListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
+            dbManager.deleteTasks();
+            changeFragment(new FragmentList());
         }
     };
 }

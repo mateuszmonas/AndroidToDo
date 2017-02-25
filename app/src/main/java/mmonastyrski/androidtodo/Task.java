@@ -8,8 +8,20 @@ public class Task {
     private String _description;
     private boolean _done;
     
+    public Task(int _id, String _description, boolean _done) {
+        this._id = _id;
+        this._description = _description;
+        this._done = _done;
+    }
+    
+    public Task(String _description, boolean _done) {
+        this._description = _description;
+        this._done=_done;
+    }
+    
     public Task(String _description) {
         this._description = _description;
+        this._done=false;
     }
     
     public int get_id() {

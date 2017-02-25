@@ -9,18 +9,21 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by mateusz on 2/18/17.
  */
 public class TaskAdapter extends ArrayAdapter<Task> {
     
-    public TaskAdapter(Context context, Task[] tasks) {
+    public TaskAdapter(Context context, ArrayList<Task> tasks) {
         super(context, R.layout.task, tasks);
     }
     
     static class ViewHolder{
-        TextView textView;
-        CheckBox checkBox;
+        TextView taskId;
+        TextView taskDescription;
+        CheckBox isDone;
     }
     
     @Override
@@ -35,25 +38,23 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             
             holder = new ViewHolder();
             
-            holder.textView = (TextView) view.findViewById(R.id.taskDescription);
-            holder.checkBox = (CheckBox) view.findViewById(R.id.isDone);
+            holder.taskDescription = (TextView) view.findViewById(R.id.taskDescription);
+            holder.taskId = (TextView) view.findViewById(R.id.taskId);
+            holder.isDone = (CheckBox) view.findViewById(R.id.isDone);
             
             view.setTag(holder);
         }
         else {
             holder=(ViewHolder) view.getTag();
         }
-        holder.textView.setText(task.get_description());
-        holder.checkBox.setChecked(task.is_done());
-        if(holder.checkBox.isChecked()){
-            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.taskId.setText(Integer.toString(task.get_id()));
+        holder.taskDescription.setText(task.get_description());
+        holder.isDone.setChecked(task.is_done());
+        if(holder.isDone.isChecked()){
+            holder.taskDescription.setPaintFlags(holder.isDone.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
         
         return view;
     }
-    
-    public void update(){
-    }
-    
     
 }

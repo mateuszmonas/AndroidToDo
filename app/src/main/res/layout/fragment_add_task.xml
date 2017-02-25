@@ -5,14 +5,22 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".FragmentAddTask">
+        tools:context=".FragmentAddTask"
+android:id="@+id/fragmentAddTask">
+
 
     <EditText
+
+            android:gravity="top"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:inputType="textMultiLine"
             android:ems="10" android:id="@+id/newTask"
             android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:imeOptions="flagNoExtractUi">
+        <requestFocus/>
+    </EditText>
+
 </RelativeLayout>

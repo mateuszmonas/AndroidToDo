@@ -2,14 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+android:gravity="center_vertical">
 
     <CheckBox
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/isDone"/>
+
+    <!-- android:layout_gravity="fill" has to be here, otherwise last line of text will be cut off -->
     <TextView
+            android:layout_gravity="fill"
             android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/taskDescription" android:layout_weight="1"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone"
+                android:id="@+id/taskId"/>
 </LinearLayout>
