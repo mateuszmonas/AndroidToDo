@@ -99,20 +99,7 @@ public class MainActivity extends AppCompatActivity {
             savedInstanceState.putString("fragment", "FragmentList");
         }
         else{
-            EditText newTask = (EditText) findViewById(R.id.newTask);
-            String description = newTask.getText().toString();
-            savedInstanceState.putString("description", description);
             savedInstanceState.putString("fragment", "FragmentAddTask");
-        }
-    }
-    
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState!=null && savedInstanceState.getString("fragment").equals("FragmentAddTask")) {
-            EditText newTask = (EditText) findViewById(R.id.newTask);
-            String description = savedInstanceState.getString("description");
-            newTask.setText(description);
         }
     }
     

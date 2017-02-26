@@ -78,7 +78,6 @@ public class DBManager extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_TASKS + " WHERE 1";
         
         Cursor c = sqLiteDatabase.rawQuery(query, null);
-        //c.moveToFirst();
         
         while (c.moveToNext()){
             if(c.getString(c.getColumnIndex(COLUMN_DESCRIPTION))!=null){

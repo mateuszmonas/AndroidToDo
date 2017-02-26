@@ -50,7 +50,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         holder.taskDescription.setText(task.get_description());
         holder.isDone.setChecked(task.is_done());
         if(holder.isDone.isChecked()){
-            holder.taskDescription.setPaintFlags(holder.isDone.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.taskDescription.setPaintFlags(holder.taskDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
         
         return view;

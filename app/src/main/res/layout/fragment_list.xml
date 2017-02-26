@@ -6,9 +6,12 @@
         android:layout_height="match_parent"
         tools:context=".FragmentList">
 
+    <!-- okay so i learned this the hard way
+    you never set list view android:layout_height to wrap_content
+    it will mess up the first item of the list -->
     <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_alignParentTop="true"
+            android:layout_height="match_parent" android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
             android:id="@+id/tasksListView"/>
 </RelativeLayout>
