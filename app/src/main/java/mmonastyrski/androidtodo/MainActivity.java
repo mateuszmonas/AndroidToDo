@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
             FragmentAddTask fragmentAddTask = (FragmentAddTask) getFragmentManager().findFragmentByTag("currentFragment");
             Task task = fragmentAddTask.task;
             TextView newTask = (TextView)findViewById(R.id.newTask);
-            String description = newTask.getText().toString();
+            String description = newTask.getText().toString().trim();
             //only adds task if description was added
             if(!description.equals("")) {
                 task.set_description(description);

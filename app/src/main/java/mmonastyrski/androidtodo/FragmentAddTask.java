@@ -12,15 +12,13 @@ public class FragmentAddTask extends Fragment {
         
     Task task;
     
-    private EditText newTask;
-    
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_task, container, false);
     
         task = new Task();
-        
-        newTask = (EditText) view.findViewById(R.id.newTask);
+    
+        EditText newTask = (EditText) view.findViewById(R.id.newTask);
         
         if(getArguments()!=null){
             int id = getArguments().getInt("id");
