@@ -1,6 +1,7 @@
 package mmonastyrski.androidtodo;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,11 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
 import java.util.ArrayList;
 
 
 public class FragmentList extends Fragment {
+    
+    private UpdateTaskListener activityCommander;
+    
+    public interface UpdateTaskListener{
+        void updateTask(Task task);
+    }
+    
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            activityCommander = (UpdateTaskListener) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString());
+        }
+    }
     
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,7 +62,20 @@ public class FragmentList extends Fragment {
                 dbManager.updateTask(task);
             }
         });
+        
+        tasksListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                
+                Task task = (Task) adapterView.getItemAtPosition(i);
+                activityCommander.updateTask(task);
+                
+                return true;
+            }
+        });
+        
         return view;
     }
     
+
 }

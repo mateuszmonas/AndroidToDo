@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.*;
 import android.view.View.OnClickListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentList.UpdateTaskListener {
     
     private DBManager dbManager;
     private Button rightButton;
@@ -29,27 +27,35 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState!=null){
             switch (savedInstanceState.getString("fragment")){
                 case "FragmentAddTask":{
-                    addFragmentAddTaskButtons();
                     changeFragment(new FragmentAddTask());
                     break;
                 }
                 case "FragmentList":{
-                    addFragmentListButtons();
                     changeFragment(new FragmentList());
                     break;
                 }
                 default:{
-                    addFragmentListButtons();
                     changeFragment(new FragmentList());
                     break;
                 }
             }
         }
         else {
-            addFragmentListButtons();
             changeFragment(new FragmentList());
         }
         
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.fragment);
+        if(fragment instanceof FragmentList){
+            savedInstanceState.putString("fragment", "FragmentList");
+        }
+        else{
+            savedInstanceState.putString("fragment", "FragmentAddTask");
+        }
     }
     
     private void createButtons(){
@@ -74,45 +80,33 @@ public class MainActivity extends AppCompatActivity {
     
         toolbar.addView(rightButton, addButtonParams);
         toolbar.addView(leftButton, removeButtonParams);
-    
     }
     
-    private void addFragmentAddTaskButtons(){
-        leftButton.setText("B");
-        leftButton.setOnClickListener(onGoBackListener);
-        rightButton.setText("C");
-        rightButton.setOnClickListener(onCreateTaskListener);
-    }
-    
-    private void addFragmentListButtons(){
-        leftButton.setText("R");
-        leftButton.setOnClickListener(onRemoveListener);
-        rightButton.setText("A");
-        rightButton.setOnClickListener(onGoToAddTaskListener);
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.fragment);
-        if(fragment instanceof FragmentList){
-            savedInstanceState.putString("fragment", "FragmentList");
+    private void addButtons(Fragment f){
+        if(f instanceof FragmentList){
+            leftButton.setText("R");
+            leftButton.setOnClickListener(onRemoveListener);
+            rightButton.setText("A");
+            rightButton.setOnClickListener(onGoToAddTaskListener);
         }
-        else{
-            savedInstanceState.putString("fragment", "FragmentAddTask");
+        if(f instanceof FragmentAddTask){
+            leftButton.setText("B");
+            leftButton.setOnClickListener(onGoBackListener);
+            rightButton.setText("C");
+            rightButton.setOnClickListener(onCreateTaskListener);
         }
     }
     
     private void changeFragment(Fragment f){
+        addButtons(f);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, f);
+        transaction.replace(R.id.fragment, f, "currentFragment");
         transaction.commit();
     }
     
     private OnClickListener onGoToAddTaskListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            addFragmentAddTaskButtons();
             changeFragment(new FragmentAddTask());
         }
     };
@@ -120,21 +114,30 @@ public class MainActivity extends AppCompatActivity {
     private OnClickListener onCreateTaskListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            EditText newTask = (EditText)findViewById(R.id.newTask);
-            String description = newTask.getText().toString().trim();
+            //get current fragment so we can access currently edited task
+            FragmentAddTask fragmentAddTask = (FragmentAddTask) getFragmentManager().findFragmentByTag("currentFragment");
+            Task task = fragmentAddTask.task;
+            TextView newTask = (TextView)findViewById(R.id.newTask);
+            String description = newTask.getText().toString();
             //only adds task if description was added
             if(!description.equals("")) {
-                dbManager.addTask(new Task(description));
-                addFragmentListButtons();
-            changeFragment(new FragmentList());
-        }
+                task.set_description(description);
+                //if task id is already set, task will be updated
+                if(task.get_id()!=0){
+                    dbManager.updateTask(task);
+                }
+                //if id is not set, new task will be created
+                else {
+                    dbManager.addTask(new Task(task.get_description()));
+                }
+                changeFragment(new FragmentList());
+            }
         }
     };
     
     private OnClickListener onGoBackListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            addFragmentListButtons();
             changeFragment(new FragmentList());
         }
     };
@@ -146,4 +149,20 @@ public class MainActivity extends AppCompatActivity {
             changeFragment(new FragmentList());
         }
     };
+    
+    @Override
+    public void updateTask(Task task) {
+        
+        FragmentAddTask fragmentAddTask = new FragmentAddTask();
+        Bundle args = new Bundle();
+        args.putString("description", task.get_description());
+        args.putInt("id", task.get_id());
+        args.putBoolean("isDone", task.is_done());
+        fragmentAddTask.setArguments(args);
+        
+        changeFragment(fragmentAddTask);
+    
+        
+        
+    }
 }
