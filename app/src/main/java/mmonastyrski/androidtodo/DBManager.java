@@ -64,12 +64,12 @@ public class DBManager extends SQLiteOpenHelper {
         }
     }
     
-    public void updateTask(String id, String description, boolean is_done){
+    public void updateTask(Task task){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_DESCRIPTION, description);
-        values.put(COLUMN_DONE, is_done?1:0);
-        sqLiteDatabase.update(TABLE_TASKS, values, COLUMN_ID + "=?", new String[]{id});
+        values.put(COLUMN_DESCRIPTION, task.get_description());
+        values.put(COLUMN_DONE, task.is_done()?1:0);
+        sqLiteDatabase.update(TABLE_TASKS, values, COLUMN_ID + "=?", new String[]{Integer.toString(task.get_id())});
     }
     
     public ArrayList<Task> getDB(){

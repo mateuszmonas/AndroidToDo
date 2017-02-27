@@ -34,7 +34,6 @@ public class FragmentList extends Fragment {
                 
                 CheckBox isDone = (CheckBox)view.findViewById(R.id.isDone);
                 TextView taskDescription = ((TextView)view.findViewById(R.id.taskDescription));
-                TextView taskId = ((TextView)view.findViewById(R.id.taskId));
                 
                 
                 isDone.setChecked(task.is_done());
@@ -44,7 +43,7 @@ public class FragmentList extends Fragment {
                 else {
                     taskDescription.setPaintFlags(taskDescription.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-                dbManager.updateTask(taskId.getText().toString(), taskDescription.getText().toString(), isDone.isChecked());
+                dbManager.updateTask(task);
             }
         });
         return view;

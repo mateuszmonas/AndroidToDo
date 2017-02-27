@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.Locale;
 
 
 public class TaskAdapter extends ArrayAdapter<Task> {
@@ -20,7 +18,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     }
     
     static class ViewHolder{
-        TextView taskId;
         TextView taskDescription;
         CheckBox isDone;
     }
@@ -38,7 +35,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             holder = new ViewHolder();
             
             holder.taskDescription = (TextView) view.findViewById(R.id.taskDescription);
-            holder.taskId = (TextView) view.findViewById(R.id.taskId);
             holder.isDone = (CheckBox) view.findViewById(R.id.isDone);
             
             view.setTag(holder);
@@ -46,7 +42,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         else {
             holder=(ViewHolder) view.getTag();
         }
-        holder.taskId.setText(String.format(Locale.getDefault(), "%d", task.get_id()));
         holder.taskDescription.setText(task.get_description());
         holder.isDone.setChecked(task.is_done());
         if(holder.isDone.isChecked()){
