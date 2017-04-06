@@ -163,9 +163,7 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         
         FragmentAddTask fragmentAddTask = new FragmentAddTask();
         Bundle args = new Bundle();
-        args.putString("description", task.get_description());
-        args.putInt("id", task.get_id());
-        args.putBoolean("isDone", task.is_done());
+        args.putParcelable("task", task);
         fragmentAddTask.setArguments(args);
         changeFragment(fragmentAddTask);
         

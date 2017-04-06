@@ -1,7 +1,9 @@
 package mmonastyrski.androidtodo;
 
-//TODO make this parcelable
-public class Task {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Task implements Parcelable {
     private int _id;
     private String _description;
     private boolean _done;
@@ -20,6 +22,12 @@ public class Task {
     Task(String _description) {
         this._description = _description;
         this._done=false;
+    }
+
+    private Task(Parcel source){
+        _description=source.readString();
+        _id=source.readInt();
+        _done=source.readByte() != 0;
     }
     
     Task(){
@@ -51,4 +59,29 @@ public class Task {
     void set_done(boolean _isDone) {
         this._done = _isDone;
     }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(_description);
+        parcel.writeInt(_id);
+        parcel.writeByte((byte) (_done ? 1 : 0));
+    }
+    
+    public static final Creator<Task> CREATOR = new Creator<Task>() {
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+        
+        @Override
+        public Task createFromParcel(Parcel source) {
+            return new Task(source);
+        }
+    };
+    
 }
