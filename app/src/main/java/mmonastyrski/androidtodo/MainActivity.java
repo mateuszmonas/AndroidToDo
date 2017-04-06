@@ -1,6 +1,9 @@
 package mmonastyrski.androidtodo;
 
 import android.app.Fragment;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
                 }
                 changeFragment(new FragmentList());
             }
+            updateWidget();
         }
     };
     
@@ -147,9 +151,13 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         public void onClick(View view) {
             dbManager.deleteTasks();
             changeFragment(new FragmentList());
+            
+            updateWidget();
         }
     };
     
+    //changes activity to FragmentAddTask
+    //is used to update task description after it has already been made
     @Override
     public void updateTask(Task task) {
         
@@ -159,10 +167,18 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         args.putInt("id", task.get_id());
         args.putBoolean("isDone", task.is_done());
         fragmentAddTask.setArguments(args);
-        
         changeFragment(fragmentAddTask);
+        
+        updateWidget();
+    }
     
-        
-        
+    //called after data chas been changed
+    //to reflect changes in the widget
+    private void updateWidget(){
+        Context context = getApplicationContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisWidget = new ComponentName(context, TaskWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_view);
     }
 }

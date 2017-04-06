@@ -4,7 +4,7 @@
              android:layout_height="match_parent"
              android:layout_margin="@dimen/widget_margin">
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-               android:id="@+id/stack_view"
+               android:id="@+id/task_view"
                android:layout_width="match_parent"
                android:layout_height="match_parent"/>
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
