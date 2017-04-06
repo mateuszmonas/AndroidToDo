@@ -18,6 +18,7 @@ public class FragmentList extends Fragment {
     
     public interface UpdateTaskListener{
         void updateTask(Task task);
+        void updateWidget();
     }
     
     @Override
@@ -60,6 +61,7 @@ public class FragmentList extends Fragment {
                     taskDescription.setPaintFlags(taskDescription.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
                 }
                 dbManager.updateTask(task);
+                activityCommander.updateWidget();
             }
         });
         

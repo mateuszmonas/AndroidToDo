@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
     
     //called after data chas been changed
     //to reflect changes in the widget
-    private void updateWidget(){
+    public void updateWidget(){
         Context context = getApplicationContext();
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName thisWidget = new ComponentName(context, TaskWidgetProvider.class);
