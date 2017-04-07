@@ -3,7 +3,6 @@ package mmonastyrski.androidtodo;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
