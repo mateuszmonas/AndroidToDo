@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        
         dbManager = new DBManager(this, null, null, 1);
         
         createButtons();
@@ -46,7 +45,17 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         else {
             changeFragment(new FragmentList());
         }
-        
+    }
+    
+    @Override
+    protected void onRestart() {
+        //this fragment is used to refresh fragment after app comes to foreground
+        //otherwise the changes to list in widget are not reflected in app
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.fragment);
+        if(fragment instanceof FragmentList) {
+            changeFragment(new FragmentList());
+        }
+        super.onRestart();
     }
     
     @Override
@@ -151,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         public void onClick(View view) {
             dbManager.deleteTasks();
             changeFragment(new FragmentList());
-            
             updateWidget();
         }
     };

@@ -13,8 +13,10 @@ import java.util.ArrayList;
 
 
 public class FragmentList extends Fragment {
-    
+    private TaskAdapter tasksAdapter;
     private UpdateTaskListener activityCommander;
+    private DBManager dbManager;
+    private ArrayList<Task> tasks = new ArrayList<>();
     
     public interface UpdateTaskListener{
         void updateTask(Task task);
@@ -32,15 +34,21 @@ public class FragmentList extends Fragment {
     }
     
     @Override
+    public void onResume() {
+        tasksAdapter.notifyDataSetChanged();
+        super.onResume();
+    }
+    
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         
-        final DBManager dbManager = new DBManager(getActivity(), null, null, 1);
+        dbManager = new DBManager(getActivity(), null, null, 1);
         
-        ArrayList<Task> tasks = dbManager.getDB();
+        tasks = dbManager.getDB();
         
-        final ListAdapter tasksAdapter = new TaskAdapter(getActivity(), tasks);
-        final ListView tasksListView = (ListView) view.findViewById(R.id.tasksListView);
+        tasksAdapter = new TaskAdapter(getActivity(), tasks);
+        ListView tasksListView = (ListView) view.findViewById(R.id.tasksListView);
         tasksListView.setAdapter(tasksAdapter);
         
         tasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

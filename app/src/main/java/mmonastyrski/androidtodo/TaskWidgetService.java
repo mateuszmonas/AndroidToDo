@@ -2,8 +2,11 @@ package mmonastyrski.androidtodo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
@@ -49,6 +52,20 @@ class TaskRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         // text based on the position.
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.task_widget_item);
         remoteViews.setTextViewText(R.id.widget_text, taskDescription);
+    
+        //set onclick item in ListView
+        Bundle extras = new Bundle();
+        
+        //okay so for some weird reason when I put parcelable
+        //object into extras it is null so i have to set
+        //every task property manually
+        extras.putString(TaskWidgetProvider.TASK_DESCRIPTION, task.get_description());
+        extras.putBoolean(TaskWidgetProvider.TASK_DONE, task.is_done());
+        extras.putInt(TaskWidgetProvider.TASK_ID, task.get_id());
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+        remoteViews.setOnClickFillInIntent(R.id.task_widget_item, fillInIntent);
+        
         // Return the remote views object.
         return remoteViews;
     }

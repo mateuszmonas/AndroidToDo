@@ -17,7 +17,7 @@ public class DBManager extends SQLiteOpenHelper {
     private static final String COLUMN_DESCRIPTION="_description";
     private static final String COLUMN_DONE="_done";
     
-    public DBManager(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    DBManager(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
     
@@ -39,7 +39,7 @@ public class DBManager extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
     
-    public void addTask(Task task){
+    void addTask(Task task){
         ContentValues values = new ContentValues();
         values.put(COLUMN_DESCRIPTION, task.get_description());
         values.put(COLUMN_DONE, task.is_done()?1:0);
@@ -48,7 +48,7 @@ public class DBManager extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
     
-    public void deleteTasks(){
+    void deleteTasks(){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_TASKS + " WHERE 1";
         
@@ -62,17 +62,20 @@ public class DBManager extends SQLiteOpenHelper {
                 }
             }
         }
+        c.close();
+        sqLiteDatabase.close();
     }
     
-    public void updateTask(Task task){
+    void updateTask(Task task){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_DESCRIPTION, task.get_description());
         values.put(COLUMN_DONE, task.is_done()?1:0);
         sqLiteDatabase.update(TABLE_TASKS, values, COLUMN_ID + "=?", new String[]{Integer.toString(task.get_id())});
+        sqLiteDatabase.close();
     }
     
-    public ArrayList<Task> getDB(){
+    ArrayList<Task> getDB(){
         ArrayList<Task> tasks = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_TASKS + " WHERE 1";

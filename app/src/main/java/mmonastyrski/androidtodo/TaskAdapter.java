@@ -13,8 +13,11 @@ import java.util.ArrayList;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     
-    public TaskAdapter(Context context, ArrayList<Task> tasks) {
+    private ArrayList<Task> tasks = new ArrayList<>();
+    
+    TaskAdapter(Context context, ArrayList<Task> tasks) {
         super(context, R.layout.task, tasks);
+        this.tasks = tasks;
     }
     
     static class ViewHolder{
@@ -26,7 +29,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         ViewHolder holder;
-        Task task = getItem(position);
+        Task task = tasks.get(position);
         
         if(view==null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -50,5 +53,4 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         
         return view;
     }
-    
 }
