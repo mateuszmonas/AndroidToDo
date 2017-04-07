@@ -43,12 +43,13 @@ public class TaskWidgetProvider extends AppWidgetProvider {
             if(task.get_id()!=-1) {
                 dbManager.updateTask(task);
             }
+            //update widget when data changes
+            ComponentName thisWidget = new ComponentName(context, TaskWidgetProvider.class);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_view);
         }
         
-        //update widget when data changes
-        ComponentName thisWidget = new ComponentName(context, TaskWidgetProvider.class);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_view);
+        
         
         super.onReceive(context, intent);
     }
@@ -61,12 +62,17 @@ public class TaskWidgetProvider extends AppWidgetProvider {
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         rv.setRemoteAdapter(R.id.task_view, intent);
         //set onclick for individual items in task_view
-        Intent toastIntent = new Intent(context, TaskWidgetProvider.class);
-        toastIntent.setAction(TaskWidgetProvider.UPDATE_TASK);
-        toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
+        Intent taskIntent = new Intent(context, TaskWidgetProvider.class);
+        taskIntent.setAction(TaskWidgetProvider.UPDATE_TASK);
+        taskIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        PendingIntent taskPendingIntent = PendingIntent.getBroadcast(context, 0, taskIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        rv.setPendingIntentTemplate(R.id.task_view, pendingIntent);
+        rv.setPendingIntentTemplate(R.id.task_view, taskPendingIntent);
+        
+        Intent launchIntent = new Intent(context, MainActivity.class);
+        PendingIntent launchPendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+        rv.setOnClickPendingIntent(R.id.widget_title, launchPendingIntent);
+        
         // The empty view is displayed when the collection has no items. It should be a sibling
         // of the collection view.
         rv.setEmptyView(R.id.task_view, R.id.empty_view);

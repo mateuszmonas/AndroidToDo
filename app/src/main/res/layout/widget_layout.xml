@@ -8,8 +8,9 @@
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:textAlignment="center"
-              android:text="@string/widget_title"
-              android:background="#ff0000" />
+              android:text="@string/widget_title_text"
+              android:background="#ff0000"
+              android:id="@+id/widget_title"/>
 
     <ListView android:id="@+id/task_view"
               android:layout_width="match_parent"

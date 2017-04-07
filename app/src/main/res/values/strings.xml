@@ -4,5 +4,5 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="empty_view_text">No Tasks To Do</string>
-    <string name="widget_title">TODO</string>
+    <string name="widget_title_text">TODO</string>
 </resources>
