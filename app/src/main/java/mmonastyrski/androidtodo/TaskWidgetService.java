@@ -24,23 +24,30 @@ public class TaskWidgetService extends RemoteViewsService {
 class TaskRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private List<Task> Tasks = new ArrayList<>();
     private Context mContext;
+    private DBManager dbManager;
     
     TaskRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
     }
+    
     public void onCreate() {
         // In onCreate() you setup any connections / cursors to your data source. Heavy lifting,
         // for example downloading or creating content etc, should be deferred to onDataSetChanged()
         // or getViewAt(). Taking more than 20 seconds in this call will result in an ANR.
+        dbManager = new DBManager(mContext.getApplicationContext(), null, null, 1);
     }
+    
     public void onDestroy() {
         // In onDestroy() you should tear down anything that was setup for your data source,
         // eg. cursors, connections, etc.
         Tasks.clear();
+        dbManager.close();
     }
+    
     public int getCount() {
         return Tasks.size();
     }
+    
     public RemoteViews getViewAt(int position) {
         Task task = Tasks.get(position);
         SpannableString taskDescription = new SpannableString(task.get_description());
@@ -69,22 +76,26 @@ class TaskRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         // Return the remote views object.
         return remoteViews;
     }
+    
     public RemoteViews getLoadingView() {
         // You can create a custom loading view (for instance when getViewAt() is slow.) If you
         // return null here, you will get the default loading view.
         return null;
     }
+    
     public int getViewTypeCount() {
         return 1;
     }
+    
     public long getItemId(int position) {
         return position;
     }
+    
     public boolean hasStableIds() {
         return true;
     }
+    
     public void onDataSetChanged() {
-        final DBManager dbManager = new DBManager(mContext.getApplicationContext(), null, null, 1);
         // This is triggered when you call AppWidgetManager notifyAppWidgetViewDataChanged
         // on the collection view corresponding to this factory. You can do heaving lifting in
         // here, synchronously. For example, if you need to process an image, fetch something

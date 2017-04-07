@@ -48,9 +48,6 @@ public class TaskWidgetProvider extends AppWidgetProvider {
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_view);
         }
-        
-        
-        
         super.onReceive(context, intent);
     }
     
@@ -87,6 +84,4 @@ public class TaskWidgetProvider extends AppWidgetProvider {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
-    
-
 }
