@@ -9,6 +9,11 @@
         <item name="android:typeface">monospace</item>
     </style>
 
+    <style name="CheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/gray</item>
+    </style>
+
     <style name="Layout" parent="AppTheme">
         <item name="android:background">@color/colorBackground</item>
     </style>

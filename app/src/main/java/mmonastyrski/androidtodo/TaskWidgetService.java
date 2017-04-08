@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -48,15 +49,19 @@ class TaskRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
     
     public RemoteViews getViewAt(int position) {
-        Task task = Tasks.get(position);
-        SpannableString taskDescription = new SpannableString(task.get_description());
-        if(Tasks.get(position).is_done()) {
-            taskDescription.setSpan(new StrikethroughSpan(), 0, task.get_description().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }
         // position will always range from 0 to getCount() - 1.
         // We construct a remote views item based on our widget item xml file, and set the
         // text based on the position.
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.task_widget_item);
+        Task task = Tasks.get(position);
+        SpannableString taskDescription = new SpannableString(task.get_description());
+        if(Tasks.get(position).is_done()) {
+            taskDescription.setSpan(new StrikethroughSpan(), 0, task.get_description().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            remoteViews.setTextColor(R.id.widget_text, R.color.gray);
+        }
+        else {
+            remoteViews.setTextColor(R.id.widget_text, Color.BLACK);
+        }
         remoteViews.setTextViewText(R.id.widget_text, taskDescription);
     
         //set onclick item in ListView

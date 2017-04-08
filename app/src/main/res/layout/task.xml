@@ -7,6 +7,8 @@
               android:descendantFocusability="blocksDescendants">
 
     <CheckBox
+            android:theme="@style/CheckBox"
+            android:background="@android:color/transparent"
             android:layout_margin="10dp"
             android:focusable="false"
             android:clickable="false"

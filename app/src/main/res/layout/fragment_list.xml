@@ -11,6 +11,8 @@
     you never set list view android:layout_height to wrap_content
     it will mess up the first item of the list -->
     <ListView
+            android:listSelector="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
             style="@style/Layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

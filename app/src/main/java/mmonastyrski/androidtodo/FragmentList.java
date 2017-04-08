@@ -3,6 +3,7 @@ package mmonastyrski.androidtodo;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -61,9 +62,12 @@ public class FragmentList extends Fragment {
                 isDone.setChecked(task.is_done());
                 if(isDone.isChecked()) {
                     taskDescription.setPaintFlags(taskDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskDescription.setTextColor(R.color.gray);
                 }
                 else {
                     taskDescription.setPaintFlags(taskDescription.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskDescription.setTextColor(Color.BLACK);
+                    
                 }
                 dbManager.updateTask(task);
                 activityCommander.updateWidget();
