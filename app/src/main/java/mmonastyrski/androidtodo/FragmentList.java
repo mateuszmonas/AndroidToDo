@@ -1,5 +1,6 @@
 package mmonastyrski.androidtodo;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Paint;
@@ -13,10 +14,8 @@ import java.util.ArrayList;
 
 
 public class FragmentList extends Fragment {
-    private TaskAdapter tasksAdapter;
     private UpdateTaskListener activityCommander;
     private DBManager dbManager;
-    private ArrayList<Task> tasks = new ArrayList<>();
     
     public interface UpdateTaskListener{
         void updateTask(Task task);
@@ -26,17 +25,15 @@ public class FragmentList extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            activityCommander = (UpdateTaskListener) context;
-        }catch (ClassCastException e){
-            throw new ClassCastException(context.toString());
-        }
+        activityCommander = (UpdateTaskListener) context;
     }
     
+    /*
+    * added to support API < 23*/
     @Override
-    public void onResume() {
-        tasksAdapter.notifyDataSetChanged();
-        super.onResume();
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        activityCommander = (UpdateTaskListener) activity;
     }
     
     @Override
@@ -44,10 +41,10 @@ public class FragmentList extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         
         dbManager = new DBManager(getActivity(), null, null, 1);
-        
-        tasks = dbManager.getDB();
-        
-        tasksAdapter = new TaskAdapter(getActivity(), tasks);
+    
+        ArrayList<Task> tasks = dbManager.getDB();
+    
+        TaskAdapter tasksAdapter = new TaskAdapter(getActivity(), tasks);
         ListView tasksListView = (ListView) view.findViewById(R.id.tasksListView);
         tasksListView.setAdapter(tasksAdapter);
         
