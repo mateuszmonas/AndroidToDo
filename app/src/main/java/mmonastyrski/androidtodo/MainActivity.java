@@ -4,18 +4,20 @@ import android.app.Fragment;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity implements FragmentList.UpdateTaskListener {
     
     private DBManager dbManager;
-    private Button rightButton;
-    private Button leftButton;
+    private ImageButton rightButton;
+    private ImageButton leftButton;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +73,23 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
     }
     
     private void createButtons(){
+        //convert 50 dp to pixels so buttons fit right in the actionbar
+        final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+        int pixels = (int) (50 * scale + 0.5f);
         RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.toolbar);
     
-        rightButton = new Button(this);
+        rightButton = new ImageButton(this);
         RelativeLayout.LayoutParams addButtonParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                pixels,
+                pixels
         );
         addButtonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         addButtonParams.addRule(RelativeLayout.ALIGN_PARENT_END);
     
-        leftButton = new Button(this);
+        leftButton = new ImageButton(this);
         RelativeLayout.LayoutParams removeButtonParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                pixels,
+                pixels
         );
         removeButtonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         removeButtonParams.addRule(RelativeLayout.ALIGN_PARENT_START);
@@ -94,22 +99,36 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         toolbar.addView(leftButton, removeButtonParams);
     }
     
+    //TODO make neat icons icons
     private void addButtons(Fragment f){
         if(f instanceof FragmentList){
-            leftButton.setText("R");
+            //set remove tasks button
+            leftButton.setImageResource(R.drawable.icon_trash);
+            leftButton.setBackgroundColor(Color.TRANSPARENT);
             leftButton.setOnClickListener(onRemoveListener);
-            rightButton.setText("A");
+            //set add new task button
+            rightButton.setImageResource(R.drawable.icon_trash);
+            rightButton.setBackgroundColor(Color.TRANSPARENT);
             rightButton.setOnClickListener(onGoToAddTaskListener);
         }
         if(f instanceof FragmentAddTask){
-            leftButton.setText("B");
+            //set go back button
+            leftButton.setImageResource(R.drawable.icon_trash);
+            leftButton.setBackgroundColor(Color.TRANSPARENT);
             leftButton.setOnClickListener(onGoBackListener);
-            rightButton.setText("C");
+            //set create task button
+            rightButton.setImageResource(R.drawable.icon_trash);
+            rightButton.setBackgroundColor(Color.TRANSPARENT);
             rightButton.setOnClickListener(onCreateTaskListener);
         }
     }
     
     private void changeFragment(Fragment f){
+        if(getCurrentFocus()!=null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
         addButtons(f);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, f, "currentFragment");
