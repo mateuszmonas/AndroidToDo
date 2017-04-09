@@ -1,6 +1,7 @@
 package mmonastyrski.androidtodo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,10 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         if(holder.isDone.isChecked()){
             holder.taskDescription.setPaintFlags(holder.taskDescription.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.taskDescription.setTextColor(R.color.gray);
+        }
+        else {
+            holder.taskDescription.setPaintFlags(holder.taskDescription.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+            holder.taskDescription.setTextColor(Color.BLACK);
         }
         
         return view;
