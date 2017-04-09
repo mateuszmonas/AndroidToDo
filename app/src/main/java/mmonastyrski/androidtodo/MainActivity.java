@@ -135,6 +135,19 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
         transaction.commit();
     }
     
+    //if fragment does not equal fragment_list it goes back to fragment_list
+    //otherwise it closes the app
+    @Override
+    public void onBackPressed() {
+        final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragment);
+        if(!(fragment instanceof FragmentList)){
+            changeFragment(new FragmentList());
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+    
     private OnClickListener onGoToAddTaskListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
