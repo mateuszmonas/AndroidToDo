@@ -65,16 +65,12 @@ class TaskRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         remoteViews.setTextViewText(R.id.widget_text, taskDescription);
     
         //set onclick item in ListView
+        //it turns out that i have to pull out bundle first
+        //and access task directly from the bundle
         Bundle extras = new Bundle();
-        
-        //okay so for some weird reason when I put parcelable
-        //object into extras it is null so i have to set
-        //every task property manually
-        extras.putString(TaskWidgetProvider.TASK_DESCRIPTION, task.get_description());
-        extras.putBoolean(TaskWidgetProvider.TASK_DONE, task.is_done());
-        extras.putInt(TaskWidgetProvider.TASK_ID, task.get_id());
+        extras.putParcelable(TaskWidgetProvider.TASK, task);
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
+        fillInIntent.putExtra(TaskWidgetProvider.BUNDLE, extras);
         remoteViews.setOnClickFillInIntent(R.id.task_widget_item, fillInIntent);
         
         // Return the remote views object.

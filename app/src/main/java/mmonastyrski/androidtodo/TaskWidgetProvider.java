@@ -6,13 +6,13 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 public class TaskWidgetProvider extends AppWidgetProvider {
     private static final String UPDATE_TASK = "mmonastyrski.androidtodo.UPDATE_TASK";
-    static final String TASK_DESCRIPTION = "mmonastyrski.androidtodo.TASK_DESCRIPTION";
-    static final String TASK_ID = "mmonastyrski.androidtodo.TASK_ID";
-    static final String TASK_DONE = "mmonastyrski.androidtodo.TASK_DONE";
+    static final String BUNDLE = "mmonastyrski.androidtodo.BUNDLE";
+    static final String TASK = "mmonastyrski.androidtodo.TASK";
     
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
@@ -29,17 +29,16 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        
+    
         if(intent.getAction().equals(UPDATE_TASK)){
             final DBManager dbManager = new DBManager(context.getApplicationContext(), null, null, 1);
-            Task task = new Task();
+    
+            //it turns out that i have to pull out bundle first
+            //and access task directly from the bundle
+            Bundle bundle = intent.getBundleExtra(BUNDLE);
+            Task task = bundle.getParcelable(TASK);
+            task.set_done(!task.is_done());
             
-            //okay so for some weird reason when I put parcelable
-            //object into extras it is null so i have to set
-            //every task property manually
-            task.set_description(intent.getStringExtra(TASK_DESCRIPTION));
-            task.set_id(intent.getIntExtra(TASK_ID, -1));
-            task.set_done(!intent.getBooleanExtra(TASK_DONE, true));
             if(task.get_id()!=-1) {
                 dbManager.updateTask(task);
             }
