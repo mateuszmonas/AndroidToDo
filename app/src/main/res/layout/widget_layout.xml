@@ -13,7 +13,7 @@
               style="@style/WidgetTitleText"/>
 
     <ListView
-              android:divider="#ff95979a"
+              android:divider="#12000000"
               android:dividerHeight="1dp"
               android:background="@color/colorBackground"
               android:id="@+id/task_view"
