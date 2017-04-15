@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
                 pixels
         );
         addButtonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        addButtonParams.addRule(RelativeLayout.ALIGN_PARENT_END);
     
         leftButton = new ImageButton(this);
         RelativeLayout.LayoutParams removeButtonParams = new RelativeLayout.LayoutParams(
@@ -92,32 +92,34 @@ public class MainActivity extends AppCompatActivity implements FragmentList.Upda
                 pixels
         );
         removeButtonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        removeButtonParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-    
-    
+        
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            addButtonParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            removeButtonParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+        }
+        
         toolbar.addView(rightButton, addButtonParams);
         toolbar.addView(leftButton, removeButtonParams);
     }
     
-    //TODO make neat icons icons
     private void addButtons(Fragment f){
         if(f instanceof FragmentList){
             //set remove tasks button
-            leftButton.setImageResource(R.drawable.icon_trash);
+            leftButton.setImageResource(R.drawable.ic_delete_forever_black_24dp);
             leftButton.setBackgroundColor(Color.TRANSPARENT);
             leftButton.setOnClickListener(onRemoveListener);
             //set add new task button
-            rightButton.setImageResource(R.drawable.icon_trash);
+            rightButton.setImageResource(R.drawable.ic_add_circle_black_24dp);
             rightButton.setBackgroundColor(Color.TRANSPARENT);
             rightButton.setOnClickListener(onGoToAddTaskListener);
         }
         if(f instanceof FragmentAddTask){
             //set go back button
-            leftButton.setImageResource(R.drawable.icon_trash);
+            leftButton.setImageResource(R.drawable.ic_cancel_black_24dp);
             leftButton.setBackgroundColor(Color.TRANSPARENT);
             leftButton.setOnClickListener(onGoBackListener);
             //set create task button
-            rightButton.setImageResource(R.drawable.icon_trash);
+            rightButton.setImageResource(R.drawable.ic_check_circle_black_24dp);
             rightButton.setBackgroundColor(Color.TRANSPARENT);
             rightButton.setOnClickListener(onCreateTaskListener);
         }
