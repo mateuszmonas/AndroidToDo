@@ -3,4 +3,5 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="empty_view_text">No Tasks To Do</string>
     <string name="widget_title_text">TODO</string>
+    <string name="newTaskHint">Enter Your Task Description</string>
 </resources>
